@@ -1,6 +1,6 @@
 // Offline-Cache: App-Dateien lokal halten, beim Öffnen online nach Updates schauen
-const CACHE = "bph2-v1";
-const CORE = ["./", "index.html", "data.js", "manifest.webmanifest", "apple-touch-icon.png", "icon-192.png", "icon-512.png"];
+const CACHE = "hbc-v2";
+const CORE = ["./", "index.html", "app.js", "style.css", "manifest.webmanifest", "data/studiengaenge.json", "apple-touch-icon.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

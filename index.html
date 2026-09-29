@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Stundenplan BPH 2</title>
+<title>Stundenplan HBC</title>
+<meta name="description" content="Stundenplan für alle Studiengänge der Hochschule Biberach, direkt aus dem LSF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Stundenplan">
@@ -16,118 +17,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
-<style>
-/* Layout: App mit zwei Reitern (Woche, Kurse) und fester Leiste unten; Tagesspalten stapeln auf dem Handy */
-:root{
-  --bg:#f3f5f4; --surface:#ffffff; --fg:#1b2420; --muted:#5b6862; --line:#d9dfdc;
-  --accent:#2f6b4f; --accent-fg:#ffffff; --accent-soft:#e1efe7;
-  --warn:#b3261e; --warn-bg:#fdecea; --note:#8a5a00; --note-bg:#fff4dc;
-  --ev-s:55%; --ev-l:94%; --ev-dot:42%;
-  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
-  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121715; --surface:#1a211e; --fg:#e4ebe7; --muted:#9aa8a1; --line:#2c3632;
-  --accent:#6fbf96; --accent-fg:#0d1411; --accent-soft:#1f3329;
-  --warn:#ff8a80; --warn-bg:#3a1d1b; --note:#f2c26b; --note-bg:#33291a;
-  --ev-s:28%; --ev-l:20%; --ev-dot:62%; color-scheme:dark }}
-:root[data-theme="dark"]{
-  --bg:#121715; --surface:#1a211e; --fg:#e4ebe7; --muted:#9aa8a1; --line:#2c3632;
-  --accent:#6fbf96; --accent-fg:#0d1411; --accent-soft:#1f3329;
-  --warn:#ff8a80; --warn-bg:#3a1d1b; --note:#f2c26b; --note-bg:#33291a;
-  --ev-s:28%; --ev-l:20%; --ev-dot:62%; color-scheme:dark }
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-:root{padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.4}
-[hidden]{display:none!important}
-.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px calc(96px + env(safe-area-inset-bottom,0px));display:grid;gap:16px}
-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px}
-h1{font-family:var(--f-display);font-weight:700;font-size:2rem;margin:0;line-height:1;text-wrap:balance}
-.sub{color:var(--muted);font-size:.88rem;margin-top:4px}
-.links{display:flex;flex-wrap:wrap;gap:8px}
-.btn{font:600 .9rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 12px;border-radius:8px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.btn:hover{border-color:var(--accent)}
-.btn:disabled{opacity:.4;cursor:default}
-.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.next{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
-.lbl{font:600 .72rem var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.next strong{font-size:1.05rem}
-.nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.kw{font-family:var(--f-display);font-weight:600;font-size:1.5rem;margin-right:auto;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.kw small{font-family:var(--f-body);font-weight:400;font-size:.95rem;color:var(--muted)}
-.banner{background:var(--note-bg);color:var(--note);border-radius:8px;padding:8px 12px;font-weight:600;font-size:.9rem}
-.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;align-items:start}
-.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:8px;min-width:0}
-.day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.dh{display:flex;justify-content:space-between;align-items:baseline;padding:0 2px 4px;border-bottom:1px solid var(--line)}
-.dh b{font-family:var(--f-display);font-size:1.2rem;font-weight:600;letter-spacing:.02em}
-.dh span{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
-.empty{color:var(--muted);font-size:.88rem;padding:6px 2px}
-.ev{background:hsl(var(--h) var(--ev-s) var(--ev-l));border-radius:8px;padding:8px 10px;display:grid;gap:3px;min-width:0}
-.ev .t{font:500 .8rem var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
-.ev .n{font-weight:700;display:flex;gap:7px;align-items:center;line-height:1.2}
-.dot{width:9px;height:9px;border-radius:50%;flex:none;background:hsl(var(--h) 60% var(--ev-dot))}
-.ev .r{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
-.tag{font:600 .68rem var(--f-body);text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:4px;background:var(--surface);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
-.tag.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent}
-.tag.note{background:var(--note-bg);color:var(--note);border-color:transparent}
-.ev.cancel{opacity:.6}
-.ev.cancel .n span,.ev.cancel .t{text-decoration:line-through}
-.ev.clash{box-shadow:inset 0 0 0 2px var(--warn)}
-h2{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0;letter-spacing:.02em}
-.fine{color:var(--muted);font-size:.85rem;max-width:70ch;margin:0}
-/* Kurse */
-.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.search{flex:1 1 220px;min-width:0;font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-.seg button{font:600 .85rem var(--f-body);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.group{display:grid;gap:8px}
-.group h3{margin:6px 0 0;font:600 .75rem var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;justify-content:space-between}
-.list{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.row{display:flex;gap:12px;align-items:center;padding:11px 12px;border-top:1px solid var(--line)}
-.row:first-child{border-top:0}
-.row .info{flex:1;min-width:0;display:grid;gap:2px}
-.row .nm{font-weight:700;display:flex;gap:8px;align-items:center;line-height:1.25}
-.row .nm span{overflow-wrap:anywhere}
-.row .meta{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
-.row .meta .w{color:var(--warn);font-weight:600}
-.tog{flex:none;font:700 .85rem var(--f-body);min-width:108px;padding:8px 10px;border-radius:999px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
-.tog[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
-.count{font:600 .8rem var(--f-body);background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:999px}
-/* Tab-Leiste */
-.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:6px 16px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
-.tabbar button{flex:0 1 200px;display:grid;justify-items:center;gap:2px;background:none;border:0;color:var(--muted);font:600 .75rem var(--f-body);padding:6px;border-radius:10px;cursor:pointer}
-.tabbar button svg{width:24px;height:24px}
-.tabbar button[aria-selected="true"]{color:var(--accent);background:var(--accent-soft)}
-.actions{display:flex;flex-wrap:wrap;gap:8px}
-.sharebox{display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
-.welcome{background:var(--accent-soft);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
-.welcome h2{font-size:1.4rem}
-.welcome p{margin:0;max-width:62ch}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:6}
-@media (prefers-reduced-motion:no-preference){.tog,.ev{transition:background .15s,color .15s,opacity .15s}}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="wrap">
   <header>
     <div>
-      <h1>Stundenplan BPH 2</h1>
-      <div class="sub" id="stand">Projektmanagement Holzbau · WS 2026/27</div>
+      <h1>Stundenplan HBC</h1>
+      <div class="stgbar"><span id="stgname">Kein Studiengang gewählt</span><button class="linkbtn" id="stgchange" type="button">Studiengang wählen</button></div>
     </div>
     <div class="links">
       <a class="btn primary" href="https://lsf.hochschule-bc.de/qisserver/rds?state=currentLectures&type=1&next=CurrentLectures.vm&nextdir=ressourcenManager&navigationPosition=lectures%2CcanceledLectures&breadcrumb=canceledLectures&topitem=lectures&subitem=canceledLectures&asi=" target="_blank" rel="noopener">Ausfälle im LSF ↗</a>
-      <a class="btn" href="https://lsf.hochschule-bc.de/qisserver/rds?state=wplan&k_abstgv.abstgvnr=143&week=-1&act=stg&pool=stg&show=liste&P.vx=lang&P.subc=plan" target="_blank" rel="noopener">Studiengangplan ↗</a>
+      <a class="btn" id="lsfplan" href="https://lsf.hochschule-bc.de/qisserver/rds?state=wplan&act=stg&pool=stg&show=liste&P.vx=kurz&P.subc=plan" target="_blank" rel="noopener">Studiengangplan ↗</a>
     </div>
   </header>
 
   <div class="welcome" id="welcome" hidden></div>
+
+  <section id="view-pick" class="picker" hidden>
+    <div class="nav"><h2 style="margin-right:auto">Studiengang wählen</h2><span class="count" id="stand"></span></div>
+    <input class="search" id="stgq" type="search" placeholder="Suchen, z. B. Holzbau, BWL, Architektur" autocomplete="off">
+    <div id="stglist" class="group"></div>
+    <p class="fine">Grau: Für diesen Studiengang stehen im LSF für das aktuelle Semester keine Termine im Studiengangplan.</p>
+  </section>
 
   <section id="view-week" class="group" role="tabpanel">
     <div class="next" id="next"></div>
@@ -145,7 +57,7 @@ h2{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0;letter
   <section id="view-courses" class="group" role="tabpanel" hidden>
     <div class="nav"><h2 style="margin-right:auto">Kurse</h2><span class="count" id="selcount"></span></div>
     <div class="tools">
-      <input class="search" id="q" type="search" placeholder="Kurs suchen, z. B. Holzbau" autocomplete="off">
+      <input class="search" id="q" type="search" placeholder="Kurs suchen" autocomplete="off">
       <div class="seg" id="seg">
         <button type="button" data-f="all" aria-pressed="true">Alle</button>
         <button type="button" data-f="mine" aria-pressed="false">Angemeldet</button>
@@ -156,18 +68,17 @@ h2{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0;letter
       <button class="btn primary" id="share" type="button">Auswahl teilen</button>
       <button class="btn" id="ics" type="button">In Kalender exportieren</button>
       <button class="btn" id="clear" type="button">Alle abmelden</button>
-      <button class="btn" id="reset" type="button">Vorlage 2. Semester laden</button>
     </div>
     <div class="sharebox" id="sharebox" hidden>
       <label class="lbl" for="sharelink">Link für deine Kommilitonen</label>
       <input class="search" id="sharelink" type="text" readonly>
       <span class="fine" id="sharemsg"></span>
     </div>
-    <p class="fine">An- und Abmelden gilt nur für diese App und legt fest, was im Wochenplan erscheint. Im LSF steht bei allen Kursen dieses Plans „Keine Belegpflicht“. Prüfungsanmeldungen laufen weiterhin über das Hochschulportal. Deine Auswahl bleibt auf diesem Gerät gespeichert. Tipp fürs iPhone: In Safari über Teilen → „Zum Home-Bildschirm“ als App ablegen.</p>
+    <p class="fine">Die Semester-Einteilung ist grob und aus den Modulnummern im LSF abgeleitet. An- und Abmelden gilt nur für diese App und legt fest, was im Wochenplan erscheint; es ersetzt keine Belegung oder Prüfungsanmeldung im Hochschulportal. Deine Auswahl bleibt auf diesem Gerät gespeichert. Tipp fürs iPhone: In Safari über Teilen → „Zum Home-Bildschirm“ als App ablegen.</p>
   </section>
 </div>
 
-<nav class="tabbar" role="tablist">
+<nav class="tabbar" role="tablist" id="tabbar">
   <button type="button" role="tab" id="tab-week" aria-selected="true" aria-controls="view-week">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>Woche</button>
   <button type="button" role="tab" id="tab-courses" aria-selected="false" aria-controls="view-courses">
@@ -175,240 +86,6 @@ h2{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0;letter
 </nav>
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js"></script>
-<script>
-(function(){
-const DAY=864e5, WDL=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"], WDS=["So","Mo","Di","Mi","Do","Fr","Sa"];
-const P=s=>{const[y,m,d]=s.split("-").map(Number);return Date.UTC(y,m-1,d)};
-const F=t=>new Date(t).toISOString().slice(0,10);
-const fromMD=md=>{const m=+md.slice(0,2),d=+md.slice(2);return Date.UTC(m>=8?2026:2027,m-1,d)};
-const fmt=t=>{const d=new Date(t);return String(d.getUTCDate()).padStart(2,"0")+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."};
-const mins=s=>{const[h,m]=s.split(":").map(Number);return h*60+m};
-const BREAK=[P("2026-12-24"),P("2027-01-06")];
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-
-document.getElementById("stand").textContent="Projektmanagement Holzbau · WS 2026/27 · Stand LSF "+window.LSF_STAND;
-
-// Kurse aufbauen (eine Gruppe = ein wählbarer Eintrag)
-const MOD={"P.Bauphysik":"HP 1.3-1","P.Baustoffkunde 1 / Bauch.":"HP 1.3-2","P.Baukonstruktion":"HP 1.3-3","P.Grdl. Bauinformatik u. BIM":"HP 1.4-1","P.Bauteilorientiertes Planen":"HP 1.4-2","P.Entwurf und Baukonstruktion":"HP 1.4-3","P.Rechnungswesen":"HP 1.6-1","P.Grdl. Wirtschaftswissenschaften":"HP 1.6-2","P.Fachenglisch 1":"HP 1.6-3","P.Mathematik 2":"HP 2.1-1","P.Technische Mechanik 2":"HP 2.2-1"};
-const START=Object.keys(MOD).concat(["Semestereinführung BPH2"]);
-const courses=[];
-window.LSF_DATA.forEach(([name,groups])=>groups.forEach(([grp,ser,sing])=>{
-  const pre=(name.match(/^([PWVÜA])\./)||[])[1]||"";
-  const cat=pre==="W"?"Wahlfächer":pre?"Pflichtfächer":"Einführung & Veranstaltungen";
-  const label=name.replace(/^[PWVÜA]\./,"").replace(/ \/ [PWVA]\..*$/,"")+(pre==="Ü"?" (Übung)":"")+(grp?" · "+grp:"");
-  const id=name+(grp?"|"+grp:"");
-  courses.push({id,name,label,cat,mod:MOD[name]||"",ser,sing,h:Math.round((courses.length*137.508)%360)});
-}));
-
-// Termine expandieren
-courses.forEach(c=>{
-  const ev=[];
-  const moved=new Set();
-  c.sing.forEach(([f,t,r,ds,cx])=>ds.forEach(md=>{ev.push({c,d:fromMD(md),f,t,r,cancel:cx.includes(md),kind:"Einzeltermin"});moved.add(md)}));
-  c.ser.forEach(([wd,f,t,step,a,b,cx,r])=>{
-    for(let d=fromMD(a);d<=fromMD(b);d+=step*DAY){
-      const md=F(d).slice(5).replace("-","");
-      if(d>=BREAK[0]&&d<=BREAK[1]) continue;
-      const isX=cx.includes(md);
-      if(isX&&moved.has(md)){ev.forEach(e=>{if(F(e.d).slice(5).replace("-","")===md&&!e.cancel&&e.f===f)e.moved=true});continue}
-      ev.push({c,d,f,t,r,cancel:isX,kind:step===14?"14-tägl.":""});
-    }
-  });
-  ev.sort((x,y)=>x.d-y.d||mins(x.f)-mins(y.f));
-  c.ev=ev;
-  // Kurzbeschreibung
-  const parts=c.ser.map(([wd,f,t,step,a,b,cx,r])=>WDS[wd]+" "+f+"–"+t+(step===14?" (14-tägl.)":"")+" · "+r);
-  const n=c.sing.reduce((s,x)=>s+x[3].length,0);
-  if(n&&!c.ser.length){const first=ev.find(e=>!e.cancel)||ev[0];parts.push(n===1?WDS[new Date(first.d).getUTCDay()]+" "+fmt(first.d)+" "+first.f+"–"+first.t+" · "+first.r:n+" Einzeltermine ab "+fmt(first.d))}
-  c.summary=parts.join(" | ");
-});
-const byId=Object.fromEntries(courses.map(c=>[c.id,c]));
-
-// Speicher
-const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const stored=store.get("bph-sel-v2");
-let sel=new Set((stored||START).filter(id=>byId[id]));
-const save=()=>{store.set("bph-sel-v2",[...sel]);};
-// Kurz-Codes für Teilen-Links
-const code=id=>{let h=5381;for(const ch of id)h=((h*33)^ch.charCodeAt(0))>>>0;return h.toString(36).slice(0,5)};
-const byCode=Object.fromEntries(courses.map(c=>[code(c.id),c]));
-
-// Überschneidungen
-function clashesOf(list){
-  const live=list.filter(e=>!e.cancel), out=new Set();
-  for(let i=0;i<live.length;i++)for(let j=i+1;j<live.length;j++){
-    const a=live[i],b=live[j];
-    if(a.d===b.d&&a.c!==b.c&&mins(a.f)<mins(b.t)&&mins(b.f)<mins(a.t)){out.add(a);out.add(b)}
-  }
-  return out;
-}
-function mineEvents(){return courses.filter(c=>sel.has(c.id)).flatMap(c=>c.ev).sort((a,b)=>a.d-b.d||mins(a.f)-mins(b.f))}
-
-// Woche
-const now=new Date(), todayK=F(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()));
-const monday=t=>t-((new Date(t).getUTCDay()+6)%7)*DAY;
-const FIRST=monday(P("2026-10-05")), LAST=monday(P("2027-01-29"));
-const clampW=t=>Math.min(LAST,Math.max(FIRST,t));
-const homeW=clampW(monday(P(todayK)));
-let week=homeW;
-const isoWeek=t=>{const th=t+(3-(new Date(t).getUTCDay()+6)%7)*DAY;const y=new Date(th).getUTCFullYear();const j4=Date.UTC(y,0,4);return 1+Math.round((th-monday(j4))/DAY/7)};
-
-function evHTML(e,clash){
-  const tags=[];
-  if(e.cancel) tags.push('<span class="tag warn">fällt aus</span>');
-  if(clash) tags.push('<span class="tag warn">Überschneidung</span>');
-  if(e.moved) tags.push('<span class="tag note">Raum geändert</span>');
-  if(e.kind) tags.push('<span class="tag">'+e.kind+'</span>');
-  return '<div class="ev'+(e.cancel?' cancel':'')+(clash?' clash':'')+'" style="--h:'+e.c.h+'">'+
-    '<div class="t">'+e.f+'–'+e.t+'</div><div class="n"><i class="dot"></i><span>'+esc(e.c.label)+'</span></div>'+
-    '<div class="r">'+esc(e.r||"Raum offen")+'</div>'+(tags.length?'<div class="tags">'+tags.join("")+'</div>':'')+'</div>';
-}
-function renderWeek(){
-  const all=mineEvents();
-  const wk=all.filter(e=>e.d>=week&&e.d<week+7*DAY);
-  const cl=clashesOf(wk);
-  document.getElementById("kw").innerHTML="KW "+isoWeek(week)+" <small>"+fmt(week)+" – "+fmt(week+4*DAY)+new Date(week+4*DAY).getUTCFullYear()+"</small>";
-  const bn=document.getElementById("banner");
-  bn.hidden=!(week+4*DAY>=BREAK[0]&&week<=BREAK[1]);
-  bn.textContent="Weihnachtspause 24.12.–06.01.: wöchentliche Termine ausgeblendet, Einzeltermine laut LSF bleiben drin.";
-  const hasSat=wk.some(e=>new Date(e.d).getUTCDay()===6);
-  let html="";
-  for(let i=0;i<(hasSat?6:5);i++){
-    const d=week+i*DAY, evs=wk.filter(e=>e.d===d);
-    html+='<div class="day'+(F(d)===todayK?' today':'')+'"><div class="dh"><b>'+WDL[new Date(d).getUTCDay()]+'</b><span>'+fmt(d)+'</span></div>'+
-      (evs.length?evs.map(e=>evHTML(e,cl.has(e))).join(""):'<div class="empty">Frei</div>')+'</div>';
-  }
-  if(!sel.size) html='<div class="day"><div class="empty">Noch keine Kurse angemeldet. Tippe unten auf „Kurse“.</div></div>';
-  document.getElementById("days").innerHTML=html;
-  document.getElementById("prev").disabled=week<=FIRST;
-  document.getElementById("fwd").disabled=week>=LAST;
-  const nowMin=now.getHours()*60+now.getMinutes();
-  const nx=all.find(e=>!e.cancel&&(F(e.d)>todayK||(F(e.d)===todayK&&mins(e.t)>nowMin)));
-  document.getElementById("next").innerHTML=nx?'<span class="lbl">Nächster Termin</span><strong>'+esc(nx.c.label)+'</strong><span>'+WDL[new Date(nx.d).getUTCDay()]+', '+fmt(nx.d)+' · '+nx.f+'–'+nx.t+' · '+esc(nx.r||"Raum offen")+'</span>':'<span class="lbl">Keine weiteren Termine</span>';
-}
-
-// Kurse
-let filter="all", query="";
-function clashPartners(c){
-  if(!sel.size) return [];
-  const others=courses.filter(o=>o!==c&&sel.has(o.id));
-  const names=new Set();
-  const mine=c.ev.filter(e=>!e.cancel);
-  others.forEach(o=>o.ev.forEach(e=>{if(e.cancel)return;if(mine.some(m=>m.d===e.d&&mins(m.f)<mins(e.t)&&mins(e.f)<mins(m.t)))names.add(o.label)}));
-  return [...names];
-}
-function renderCourses(){
-  document.getElementById("selcount").textContent=sel.size+" angemeldet";
-  const q=query.trim().toLowerCase();
-  const cats=["Pflichtfächer","Wahlfächer","Einführung & Veranstaltungen"];
-  let html="";
-  cats.forEach(cat=>{
-    let list=courses.filter(c=>c.cat===cat&&(filter==="all"||sel.has(c.id))&&(!q||(c.label+" "+c.mod+" "+c.summary).toLowerCase().includes(q)));
-    if(!list.length) return;
-    list.sort((a,b)=>(sel.has(b.id)-sel.has(a.id))||a.label.localeCompare(b.label,"de"));
-    const nSel=list.filter(c=>sel.has(c.id)).length;
-    html+='<div class="group"><h3><span>'+cat+'</span><span>'+nSel+' / '+list.length+'</span></h3><div class="list">'+list.map(c=>{
-      const on=sel.has(c.id);
-      const cp=on?clashPartners(c):[];
-      return '<div class="row"><div class="info"><div class="nm"><i class="dot" style="--h:'+c.h+'"></i><span>'+esc(c.label)+'</span>'+(c.mod?'<span class="tag">'+c.mod+'</span>':'')+'</div>'+
-        '<div class="meta">'+esc(c.summary||"Keine Termine")+(cp.length?'<br><span class="w">Überschneidung mit: '+esc(cp.join(", "))+'</span>':'')+'</div></div>'+
-        '<button type="button" class="tog" id="t-'+courses.indexOf(c)+'" data-id="'+esc(c.id)+'" aria-pressed="'+on+'">'+(on?'✓ Angemeldet':'Anmelden')+'</button></div>';
-    }).join("")+'</div></div>';
-  });
-  document.getElementById("groups").innerHTML=html||'<p class="fine">Kein Kurs gefunden.</p>';
-}
-let toastT;
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,1800)}
-
-document.getElementById("groups").addEventListener("click",e=>{
-  const b=e.target.closest(".tog"); if(!b) return;
-  const id=b.dataset.id, c=byId[id];
-  if(sel.has(id)){sel.delete(id);toast("Abgemeldet: "+c.label)}else{sel.add(id);toast("Angemeldet: "+c.label)}
-  save(); renderCourses(); renderWeek();
-});
-document.getElementById("q").addEventListener("input",e=>{query=e.target.value;renderCourses()});
-document.getElementById("seg").addEventListener("click",e=>{
-  const b=e.target.closest("button"); if(!b) return;
-  filter=b.dataset.f;
-  document.querySelectorAll("#seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  renderCourses();
-});
-let armed=false;
-const resetBtn=document.getElementById("reset");
-resetBtn.addEventListener("click",()=>{
-  if(!armed){armed=true;resetBtn.textContent="Aktuelle Auswahl ersetzen? Nochmal tippen";setTimeout(()=>{armed=false;resetBtn.textContent="Vorlage 2. Semester laden"},3000);return}
-  armed=false;resetBtn.textContent="Vorlage 2. Semester laden";
-  sel=new Set(START.filter(id=>byId[id]));save();renderCourses();renderWeek();toast("Vorlage 2. Semester geladen");
-});
-let armedC=false;
-const clearBtn=document.getElementById("clear");
-clearBtn.addEventListener("click",()=>{
-  if(!armedC){armedC=true;clearBtn.textContent="Wirklich alle abmelden? Nochmal tippen";setTimeout(()=>{armedC=false;clearBtn.textContent="Alle abmelden"},3000);return}
-  armedC=false;clearBtn.textContent="Alle abmelden";
-  sel.clear();save();renderCourses();renderWeek();toast("Alle Kurse abgemeldet");
-});
-
-// Teilen
-document.getElementById("share").addEventListener("click",()=>{
-  if(!sel.size){toast("Melde zuerst Kurse an");return}
-  const link=location.origin+location.pathname+"#k="+[...sel].map(code).join(".");
-  const box=document.getElementById("sharebox"), inp=document.getElementById("sharelink"), msg=document.getElementById("sharemsg");
-  box.hidden=false; inp.value=link;
-  const fallback=()=>{inp.focus();inp.select();msg.textContent="Link markiert. Kopieren und per WhatsApp oder Mail verschicken."};
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(()=>{msg.textContent="Link kopiert. Wer ihn öffnet, kann deine "+sel.size+" Kurse mit einem Tipp übernehmen.";toast("Link kopiert")},fallback)}else fallback();
-});
-
-// Kalender-Export
-document.getElementById("ics").addEventListener("click",()=>{
-  const evs=mineEvents().filter(e=>!e.cancel);
-  if(!evs.length){toast("Keine Termine zum Exportieren");return}
-  const dt=(d,t)=>F(d).replace(/-/g,"")+"T"+t.replace(":","")+"00";
-  const ex=s=>String(s).replace(/[\\,;]/g,m=>"\\"+m);
-  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//BPH//Stundenplan//DE","CALSCALE:GREGORIAN","X-WR-CALNAME:Uni","X-WR-TIMEZONE:Europe/Berlin",
-  "BEGIN:VTIMEZONE","TZID:Europe/Berlin","BEGIN:DAYLIGHT","TZOFFSETFROM:+0100","TZOFFSETTO:+0200","TZNAME:CEST","DTSTART:19700329T020000","RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU","END:DAYLIGHT","BEGIN:STANDARD","TZOFFSETFROM:+0200","TZOFFSETTO:+0100","TZNAME:CET","DTSTART:19701025T030000","RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU","END:STANDARD","END:VTIMEZONE"];
-  evs.forEach(e=>L.push("BEGIN:VEVENT","UID:"+code(e.c.id)+"-"+dt(e.d,e.f)+"@bph-stundenplan","DTSTAMP:20260929T080000Z","DTSTART;TZID=Europe/Berlin:"+dt(e.d,e.f),"DTEND;TZID=Europe/Berlin:"+dt(e.d,e.t),"SUMMARY:"+ex(e.c.label),"LOCATION:"+ex("HBC "+(e.r||"Raum offen")),"DESCRIPTION:"+ex((e.c.mod?e.c.mod+" · ":"")+"Stand LSF "+window.LSF_STAND),"END:VEVENT"));
-  L.push("END:VCALENDAR");
-  const blob=new Blob([L.join("\r\n")+"\r\n"],{type:"text/calendar"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Stundenplan.ics";document.body.appendChild(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
-  toast(evs.length+" Termine exportiert");
-});
-
-// Begrüßung beim ersten Start oder bei geteiltem Link
-function welcome(html){const w=document.getElementById("welcome");w.innerHTML=html;w.hidden=!html}
-const hk=(location.hash.match(/^#k=([\w.]+)/)||[])[1];
-if(hk){
-  const ids=hk.split(".").map(k=>byCode[k]).filter(Boolean).map(c=>c.id);
-  if(ids.length){
-    welcome('<h2>Kurswahl empfangen</h2><p>Jemand hat dir eine Auswahl mit '+ids.length+' Kursen geschickt. Übernehmen? Deine bisherige Auswahl wird dabei ersetzt.</p><div class="actions"><button class="btn primary" id="w-yes" type="button">Übernehmen</button><button class="btn" id="w-no" type="button">Nein danke</button></div>');
-    document.getElementById("w-yes").onclick=()=>{sel=new Set(ids);save();history.replaceState(null,"",location.pathname);welcome("");renderWeek();renderCourses();toast(ids.length+" Kurse übernommen")};
-    document.getElementById("w-no").onclick=()=>{history.replaceState(null,"",location.pathname);welcome("")};
-  }
-}else if(!stored){
-  welcome('<h2>Willkommen</h2><p>Hier siehst du den Stundenplan für Projektmanagement Holzbau im WS 2026/27, direkt aus dem LSF. Vorausgewählt sind die Fächer des 2. Semesters. Bist du in einem anderen Semester, stell dir unter „Kurse“ deine eigene Auswahl zusammen.</p><div class="actions"><button class="btn primary" id="w-ok" type="button">Passt, 2. Semester</button><button class="btn" id="w-own" type="button">Eigene Kurse wählen</button></div>');
-  document.getElementById("w-ok").onclick=()=>{save();welcome("")};
-  document.getElementById("w-own").onclick=()=>{sel.clear();save();welcome("");renderWeek();renderCourses();show("courses")};
-}
-document.getElementById("prev").onclick=()=>{week=clampW(week-7*DAY);renderWeek()};
-document.getElementById("fwd").onclick=()=>{week=clampW(week+7*DAY);renderWeek()};
-document.getElementById("now").onclick=()=>{week=homeW;renderWeek()};
-
-function show(tab){
-  const w=tab==="week";
-  document.getElementById("view-week").hidden=!w;
-  document.getElementById("view-courses").hidden=w;
-  document.getElementById("tab-week").setAttribute("aria-selected",w);
-  document.getElementById("tab-courses").setAttribute("aria-selected",!w);
-  window.scrollTo(0,0);
-}
-document.getElementById("tab-week").onclick=()=>show("week");
-document.getElementById("tab-courses").onclick=()=>show("courses");
-if(location.hash==="#kurse") show("courses");
-
-renderWeek(); renderCourses();
-})();
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
-</script>
+<script src="app.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {
-  "name": "Stundenplan BPH 2",
+  "name": "Stundenplan HBC",
   "short_name": "Stundenplan",
-  "description": "Stundenplan Projektmanagement Holzbau, 2. Semester, HBC",
+  "description": "Stundenplan für alle Studiengänge der Hochschule Biberach",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
