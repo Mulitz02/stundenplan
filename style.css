@@ -95,6 +95,7 @@ h2{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0;letter
 @media (prefers-reduced-motion:no-preference){.tog,.ev{transition:background .15s,color .15s,opacity .15s}}
 .stgbar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.9rem;color:var(--muted)}
 .stgbar b{color:var(--fg)}
+.standline{margin-top:4px;font-size:.8rem;color:var(--muted)}
 .linkbtn{background:none;border:0;padding:0;font:600 .9rem var(--f-body);color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .picker{display:grid;gap:14px}
 .picker .row{cursor:pointer}

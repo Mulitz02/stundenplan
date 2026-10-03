@@ -44,6 +44,7 @@ async function loadList(){
   const r=await fetch("data/studiengaenge.json",{cache:"no-cache"});
   const j=await r.json(); LIST=j.list; STAND=j.stand;
   $("stand").textContent="Stand LSF "+STAND;
+  $("standtop").textContent="Termine: Stand LSF vom "+STAND;
 }
 async function loadStg(id){
   $("days").innerHTML='<div class="loading">Lade Stundenplan …</div>';
