@@ -71,8 +71,6 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .dot{width:8px;height:8px;flex:none;background:hsl(var(--h) 55% var(--ev-dot))}
 .ev .dot{display:none}
 .ev .r{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
-.ev .doz{color:var(--fg)}
-.row .meta .doz{color:var(--fg)}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
 .tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:0;background:var(--surface);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
 .tag.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent}

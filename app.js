@@ -40,11 +40,9 @@ function bucket(name,nr){
 }
 
 // Daten laden
-let DOZ={}; // Veranstaltung → Dozent/in (aus den Detailseiten im LSF)
 async function loadList(){
   const r=await fetch("data/studiengaenge.json",{cache:"no-cache"});
   const j=await r.json(); LIST=j.list; STAND=j.stand;
-  try{const d=await fetch("data/dozenten.json",{cache:"no-cache"});if(d.ok)DOZ=await d.json()}catch(e){}
   $("stand").textContent="Stand LSF "+STAND;
   $("standtop").textContent="Termine: Stand LSF vom "+STAND;
 }
@@ -67,7 +65,7 @@ function build(data){
     const [bo,bl]=bucket(name,nr);
     const label=nice(name)+(grp?" · "+grp:"");
     const id=name+(grp?"|"+grp:"");
-    courses.push({id,name,nr,label,bo,bl,ser,sing,doz:DOZ[name]||"",h:Math.round((courses.length*137.508)%360)});
+    courses.push({id,name,nr,label,bo,bl,ser,sing,h:Math.round((courses.length*137.508)%360)});
   }));
   courses.forEach(c=>{
     const ev=[], moved=new Set();
@@ -128,7 +126,7 @@ function evHTML(e,clash){
   if(e.kind) tags.push('<span class="tag">'+e.kind+'</span>');
   return '<div class="ev'+(e.cancel?' cancel':'')+(clash?' clash':'')+'" style="--h:'+e.c.h+'">'+
     '<div class="t">'+e.f+'–'+e.t+'</div><div class="n"><i class="dot"></i><span>'+esc(e.c.label)+'</span></div>'+
-    '<div class="r">'+esc(e.r||"Raum offen")+'</div>'+(e.c.doz?'<div class="r doz">'+esc(e.c.doz)+'</div>':'')+(tags.length?'<div class="tags">'+tags.join("")+'</div>':'')+'</div>';
+    '<div class="r">'+esc(e.r||"Raum offen")+'</div>'+(tags.length?'<div class="tags">'+tags.join("")+'</div>':'')+'</div>';
 }
 // Pausen zwischen den Kursen als leerer Abstand: je länger die Pause, desto größer die Lücke
 function gapHTML(m){return '<div class="gap" style="height:'+Math.round(Math.min(96,m*0.6))+'px" aria-hidden="true"></div>'}
@@ -173,7 +171,7 @@ function renderCourses(){
   const buckets=[...new Map(courses.map(c=>[c.bo,c.bl])).entries()].sort((a,b)=>a[0]-b[0]);
   let html="";
   buckets.forEach(([bo,bl])=>{
-    let list=courses.filter(c=>c.bo===bo&&(filter==="all"||sel.has(c.id))&&(!q||(c.label+" "+c.name+" "+c.nr+" "+c.summary+" "+c.doz).toLowerCase().includes(q)));
+    let list=courses.filter(c=>c.bo===bo&&(filter==="all"||sel.has(c.id))&&(!q||(c.label+" "+c.name+" "+c.nr+" "+c.summary).toLowerCase().includes(q)));
     if(!list.length) return;
     list.sort((a,b)=>a.label.localeCompare(b.label,"de"));
     const nSel=list.filter(c=>sel.has(c.id)).length;
@@ -181,7 +179,7 @@ function renderCourses(){
     html+='<div class="group"><h3><span>'+bl+' · '+nSel+' / '+list.length+'</span><button type="button" class="all" data-b="'+bo+'" data-on="'+(allOn?0:1)+'">'+(allOn?'alle abmelden':'alle anmelden')+'</button></h3><div class="list">'+list.map(c=>{
       const on=sel.has(c.id), cp=on?clashPartners(c):[];
       return '<div class="row"><div class="info"><div class="nm"><i class="dot" style="--h:'+c.h+'"></i><span>'+esc(c.label)+'</span></div>'+
-        '<div class="meta">'+(c.doz?'<span class="doz">'+esc(c.doz)+'</span><br>':'')+esc(c.summary||"Keine Termine")+(cp.length?'<br><span class="w">Überschneidung mit: '+esc(cp.join(", "))+'</span>':'')+'</div></div>'+
+        '<div class="meta">'+esc(c.summary||"Keine Termine")+(cp.length?'<br><span class="w">Überschneidung mit: '+esc(cp.join(", "))+'</span>':'')+'</div></div>'+
         '<button type="button" class="tog" data-id="'+esc(c.id)+'" aria-pressed="'+on+'">'+(on?'✓ Angemeldet':'Anmelden')+'</button></div>';
     }).join("")+'</div></div>';
   });
@@ -238,7 +236,7 @@ $("groups").addEventListener("click",e=>{
   if(all){
     const bo=+all.dataset.b, on=all.dataset.on==="1";
     const q=query.trim().toLowerCase();
-    courses.filter(c=>c.bo===bo&&(filter==="all"||sel.has(c.id))&&(!q||(c.label+" "+c.name+" "+c.nr+" "+c.summary+" "+c.doz).toLowerCase().includes(q))).forEach(c=>on?sel.add(c.id):sel.delete(c.id));
+    courses.filter(c=>c.bo===bo&&(filter==="all"||sel.has(c.id))&&(!q||(c.label+" "+c.name+" "+c.nr+" "+c.summary).toLowerCase().includes(q))).forEach(c=>on?sel.add(c.id):sel.delete(c.id));
     save();renderAll();toast(on?"Gruppe angemeldet":"Gruppe abgemeldet");return;
   }
   const b=e.target.closest(".tog"); if(!b) return;
