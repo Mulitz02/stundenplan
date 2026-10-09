@@ -78,6 +78,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .ev.cancel{opacity:.6}
 .ev.cancel .n span,.ev.cancel .t{text-decoration:line-through}
 .ev.clash{box-shadow:inset 0 0 0 2px var(--warn)}
+.gap{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;padding:0 2px;margin:-2px 0}
+.gap::before,.gap::after{content:"";flex:1;border-top:1px dashed var(--line)}
+.gap span{flex:none;white-space:nowrap}
+.gap.long{color:var(--fg)}
+.gap.long::before,.gap.long::after{border-top:2px dashed var(--muted)}
 h2{font-weight:400;font-size:1.25rem;margin:0;text-transform:uppercase;letter-spacing:.1em}
 .fine{color:var(--muted);font-size:.85rem;max-width:70ch;margin:0}
 

@@ -128,6 +128,23 @@ function evHTML(e,clash){
     '<div class="t">'+e.f+'–'+e.t+'</div><div class="n"><i class="dot"></i><span>'+esc(e.c.label)+'</span></div>'+
     '<div class="r">'+esc(e.r||"Raum offen")+'</div>'+(tags.length?'<div class="tags">'+tags.join("")+'</div>':'')+'</div>';
 }
+// Pausen zwischen den Kursen sichtbar machen: Höhe wächst mit der Länge der Pause
+function gapHTML(m){
+  const h=Math.round(Math.min(150,Math.max(22,m*0.9)));
+  const t=m>=60?Math.floor(m/60)+" h"+(m%60?" "+(m%60)+" min":""):m+" min";
+  return '<div class="gap'+(m>=60?' long':'')+'" style="height:'+h+'px"><span>'+(m>=60?'Freistunde · ':'Pause · ')+t+'</span></div>';
+}
+function dayHTML(evs,cl){
+  let html="",end=null;
+  for(const e of evs){
+    if(!e.cancel){
+      if(end!==null&&mins(e.f)-end>=5) html+=gapHTML(mins(e.f)-end);
+      end=Math.max(end??0,mins(e.t));
+    }
+    html+=evHTML(e,cl.has(e));
+  }
+  return html;
+}
 function renderWeek(){
   const all=mineEvents();
   const wk=all.filter(e=>e.d>=week&&e.d<week+7*DAY);
@@ -140,7 +157,7 @@ function renderWeek(){
   for(let i=0;i<(hasSat?6:5);i++){
     const d=week+i*DAY, evs=wk.filter(e=>e.d===d);
     html+='<div class="day'+(F(d)===todayK?' today':'')+'"><div class="dh"><b>'+WDL[new Date(d).getUTCDay()]+'</b><span>'+fmt(d)+'</span></div>'+
-      (evs.length?evs.map(e=>evHTML(e,cl.has(e))).join(""):'<div class="empty">Frei</div>')+'</div>';
+      (evs.length?dayHTML(evs,cl):'<div class="empty">Frei</div>')+'</div>';
   }
   if(!sel.size) html='<div class="day"><div class="empty">Noch keine Kurse angemeldet. Tippe unten auf „Kurse“ und melde dich für deine Fächer an.</div></div>';
   $("days").innerHTML=html;
