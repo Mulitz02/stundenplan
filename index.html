@@ -9,21 +9,20 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Stundenplan">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f3f5f4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121715" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
+<div class="topbar"><div class="in"><div class="mark"><i aria-hidden="true"></i><div>Stundenplan<small>Inoffizielle Studi-App</small></div></div></div></div>
 <div class="wrap">
   <header>
     <div>
-      <h1>Stundenplan HBC</h1>
+      <div class="kicker">Hochschule Biberach · WS 2026/27</div>
+      <h1>Dein Stundenplan</h1>
       <div class="stgbar"><span id="stgname">Kein Studiengang gewählt</span><button class="linkbtn" id="stgchange" type="button">Studiengang wählen</button></div>
       <div class="standline" id="standtop"></div>
     </div>
@@ -77,6 +76,8 @@
     </div>
     <p class="fine">Die Semester-Einteilung ist grob und aus den Modulnummern im LSF abgeleitet. An- und Abmelden gilt nur für diese App und legt fest, was im Wochenplan erscheint; es ersetzt keine Belegung oder Prüfungsanmeldung im Hochschulportal. Deine Auswahl bleibt auf diesem Gerät gespeichert. Tipp fürs iPhone: In Safari über Teilen → „Zum Home-Bildschirm“ als App ablegen.</p>
   </section>
+
+  <p class="unoff">Inoffizielle App von Studierenden, kein Angebot der Hochschule Biberach. Daten aus den öffentlichen Studiengangplänen im LSF. Maßgeblich bleibt das LSF.</p>
 </div>
 
 <nav class="tabbar" role="tablist" id="tabbar">
