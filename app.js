@@ -45,6 +45,8 @@ async function loadList(){
   const j=await r.json(); LIST=j.list; STAND=j.stand;
   $("stand").textContent="Stand LSF "+STAND;
   $("standtop").textContent="Termine: Stand LSF vom "+STAND;
+  // Optionaler Hinweis aus der Datendatei (z. B. wenn Updates pausiert sind)
+  const p=$("pause");p.innerHTML=j.hinweis||"";p.hidden=!j.hinweis;
 }
 async function loadStg(id){
   $("days").innerHTML='<div class="loading">Lade Stundenplan …</div>';

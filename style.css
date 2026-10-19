@@ -123,6 +123,10 @@ h2{font-weight:400;font-size:1.25rem;margin:0;text-transform:uppercase;letter-sp
 .stgbar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.92rem;color:var(--muted)}
 .stgbar b{color:var(--fg)}
 .standline{margin-top:4px;font-size:.8rem;color:var(--muted)}
+.pause{background:var(--note-bg);color:var(--note);border-left:4px solid var(--note);padding:12px 16px;font-size:.92rem}
+.pause p{margin:0;max-width:70ch}
+.pause b{color:inherit}
+.pause a{color:inherit;font-weight:700}
 .linkbtn{background:none;border:0;padding:0;font:400 .92rem var(--f-body);color:var(--accent);cursor:pointer;text-decoration:none;border-bottom:1px solid currentColor}
 .picker{display:grid;gap:14px}
 .picker .row{cursor:pointer}
